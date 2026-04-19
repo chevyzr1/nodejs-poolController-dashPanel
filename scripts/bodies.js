@@ -14,6 +14,8 @@
             var d = $('<div><label class="picInline-label picAmbientTemp">Air Temp</label><span class="picAirTemp"></span><label class="picUnitSymbol">&deg;</label><span class="picTempUnits">-</span></div>');
             d.appendTo(div);
             d = $('<div class="picSolarTempField"><label class="picInline-label picAmbientTemp">Solar Temp</label><span class="picSolarTemp"></span><label class="picUnitSymbol">&deg;</label><span class="picTempUnits">-</span></div>');
+        d.appendTo(div);
+        d = $('<div class="picEnclosureTempField"><label class="picInline-label picAmbientTemp">Enclosure Temp</label><span class="picEnclosureTemp"></span><label class="picUnitSymbol">&deg;</label><span class="picTempUnits">-</span></div>');
             d.appendTo(div);
             if (typeof data !== 'undefined') {
                 el.show();
@@ -41,6 +43,7 @@
 
             if (typeof data.air !== 'undefined') el.find('span.picAirTemp').text(data.air.format(tempFmt, '--'));
             if (typeof data.solar !== 'undefined') el.find('span.picSolarTemp').text(data.solar.format(tempFmt, '--'));
+            if (typeof data.solar !== 'undefined') el.find('span.picEnclosureTemp').text(data.solar.format(tempFmt, '--'));
             if (typeof data.units !== 'undefined') {
                 el.find('span.picTempUnits').text(data.units.name);
                 el.attr('data-unitsname', data.units.name);
