@@ -153,6 +153,11 @@
                         pnlOpts = $('<div></div>').appendTo(pnl);
                         pnlOpts.pnlHybridHeaterOptions({ type: type, tempUnits: o.tempUnits });
                         break;
+                    case 'jandyrs485':
+                        cols[0].elGlyph().removeClass().addClass('fas').addClass('fa-fire-alt');
+                        pnlOpts = $('<div></div>').appendTo(pnl);
+                        pnlOpts.pnlJandyRS485HeaterOptions({ type: type, tempUnits: o.tempUnits });
+                        break;
                 }
             }
             return pnl;
@@ -385,6 +390,38 @@
                 el.find('div[data-bind=maxBoostTemp]').each(function () { this.disabled(true); });
                 el.find('div[data-bind=economyTime]').each(function () { this.disabled(true); });
             }
+        },
+        dataBind: function (obj) {
+            var self = this, o = self.options, el = self.element;
+            dataBinder.bind(el, obj);
+        }
+    });
+
+    $.widget('pic.pnlJandyRS485HeaterOptions', {
+        options: {},
+        _create: function () {
+            var self = this, o = self.options, el = self.element;
+            self._buildControls();
+            el[0].dataBind = function (obj) { return self.dataBind(obj); };
+        },
+        _buildControls: function () {
+            var self = this, o = self.options, el = self.element;
+            el.empty();
+            el.addClass('pnl-jandyrs485-heater');
+            var binding = '';
+            var line = $('<div></div>').appendTo(el);
+            var addresses = [];
+            for (var i = 0; i <= 15; i++) addresses.push({ val: i + 96, desc: (i + 96) + ' (0x' + (i + 96).toString(16).toUpperCase() + ')' });
+            $('<div></div>').appendTo(line).pickList({
+                required: true,
+                bindColumn: 0, displayColumn: 1, labelText: 'Address', binding: binding + 'address',
+                columns: [{ binding: 'val', hidden: true, text: 'Address' }, { binding: 'desc', text: 'Address' }],
+                items: addresses, inputAttrs: { style: { width: '7rem' } }, labelAttrs: { style: { width: '4rem', marginLeft: '.25rem' } }
+            });
+            $('<div></div>').appendTo(line).valueSpinner({ canEdit: true, labelText: 'Cooldown Delay', binding: binding + 'cooldownDelay', min: 0, max: 10, step: 1, fmtMask: '#,##0.#', units: 'min', inputAttrs: { style: { width: '3.5rem' } }, labelAttrs: { style: { width: '7.5rem', marginLeft: '1rem', marginRight: '.25rem' } } });
+            line = $('<div></div>').appendTo(el);
+            $('<div></div>').appendTo(line).valueSpinner({ value: 1, canEdit: true, labelText: 'Stop Temp Delta', binding: binding + 'stopTempDelta', min: 0, max: 10, step: 1, fmtMask: '#,##0.#', units: '&deg;' + o.tempUnits.name, inputAttrs: { style: { width: '3.5rem' } }, labelAttrs: { style: { width: '7.5rem', marginLeft: '1rem', marginRight: '.25rem' } } });
+            $('<div></div>').appendTo(line).valueSpinner({ value: 1, canEdit: true, labelText: 'Minimum Cycle Time', binding: binding + 'minCycleTime', min: 0, max: 30, step: 1, fmtMask: '#,##0.#', units: 'min', inputAttrs: { style: { width: '3.5rem' } }, labelAttrs: { style: { marginLeft: '1rem', marginRight: '.25rem' } } });
         },
         dataBind: function (obj) {
             var self = this, o = self.options, el = self.element;
