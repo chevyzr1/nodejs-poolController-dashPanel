@@ -224,9 +224,9 @@
                 self._ensureAdminAccess(function () {
                     // Toggle/reuse a single settings popover instance.
                     if (o.settingsPopover && o.settingsPopover.length && o.settingsPopover.is(':visible')) {
-                        o.settingsPopover[0].close();
-                        o.settingsPopover.remove();
+                        var pov = o.settingsPopover;
                         o.settingsPopover = null;
+                        pov[0].close();
                         return;
                     }
                     // Cleanup any stale popovers left in DOM.
@@ -1076,7 +1076,7 @@
                     $(':root').css('--dashContainer3-display', 'none');
                 }
 
-                let arr = ['picBodies', 'picCircuits', 'picLights', 'picSchedules', 'picChemistry', 'picPumps', 'picVirtualCircuits', 'picFilters'];
+                let arr = ['picBodies', 'picCircuits', 'picLights', 'picSchedules', 'picChemistry', 'picPumps', 'picVirtualCircuits', 'picFilters', 'picValves'];
 
                 arr.forEach(id => {
                     let el = $(`.${id}`);
@@ -1263,7 +1263,9 @@
                                     divSelection.data('server', server);
                                     divSelection.on('click', function (e) {
                                         var srv = $(e.currentTarget).data('server');
-                                        dataBinder.bind(divOuter, { services: { ip: srv.resolvedHost, port: srv.port, protocol: srv.protocol + '//' } });
+                                        var ip = srv.resolvedHost || srv.hostname || '';
+                                        if (ip.indexOf(':') !== -1 && ip.indexOf('.') !== -1) ip = ip.split(':')[0];
+                                        dataBinder.bind(divOuter, { services: { ip: ip, port: srv.port, protocol: srv.protocol + '//' } });
                                         $.pic.modalDialog.closeDialog(dlg[0]);
                                     });
                                 }

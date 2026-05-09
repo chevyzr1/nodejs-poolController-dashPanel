@@ -4,12 +4,34 @@ var msgManager = {
     constants: {},
     keyBytes: {},
     configCategoryMap: null,
+    // Runtime plugin address reported by njsPC. For IntelliCenter v3.004+ this may
+    // differ from the configured address (e.g. 32 vs 33) when the OCP converges
+    // njsPC onto the first ICP slot. Resolver code uses this to relabel whichever
+    // address njsPC currently occupies as "njsPC".
+    runtime: { pluginAddress: null },
     init: function () {
         this.loadConstants();
         this.loadKeyBytes();
         this.loadConfigCategoryMap();
         console.log('Messages loaded');
         console.log(this);
+    },
+    setRuntimePluginAddress: function (addr) {
+        if (typeof addr !== 'number' || !isFinite(addr)) return;
+        var normalized = Math.max(0, Math.min(255, Math.trunc(addr)));
+        if (this.runtime.pluginAddress === normalized) return;
+        this.runtime.pluginAddress = normalized;
+        // Let any interested widgets (message list, entity flow) re-render labels.
+        try { $(document).trigger('msgManager:pluginAddressChanged', { pluginAddress: normalized }); }
+        catch (err) { /* noop */ }
+    },
+    // Resolve a bus address to a label, applying the runtime "njsPC" override for
+    // whichever slot njsPC is currently occupying.
+    resolveAddressLabel: function (addr, baseName) {
+        if (typeof addr === 'number' && this.runtime && this.runtime.pluginAddress === addr) {
+            return 'njsPC';
+        }
+        return baseName;
     },
     loadConstants: function (cb) {
         var self = this;
@@ -76,6 +98,15 @@ var msgManager = {
             return false;
 
         }) || { val: dest || 0, key: dest || 0, name: 'unk[' + dest + ']' };
+        // Runtime override: when njsPC has converged onto a different bus slot
+        // (e.g. the first ICP address 32 instead of the default 33), relabel that
+        // slot as "njsPC" so the UI reflects where the app actually lives. We
+        // clone the matched entry so the static constants table stays intact.
+        var rtAddr = this.runtime && typeof this.runtime.pluginAddress === 'number' ? this.runtime.pluginAddress : null;
+        if (rtAddr !== null) {
+            if (source === rtAddr) addrSource = $.extend({}, addrSource, { name: 'njsPC' });
+            if (dest === rtAddr) addrDest = $.extend({}, addrDest, { name: 'njsPC' });
+        }
         //var addrSource = { val: source, key: source };
         //var addrDest = { val: dest, key: dest };
         var length = msg.payloadLength;
@@ -238,7 +269,7 @@ var msgManager = {
         };
     },
     extractActionByte: function (msg) {
-        if (msg.protocol === 'chlorinator' || msg.protocol === 'aqualink') return this.extractByte(msg.header, 3);
+        if (msg.protocol === 'chlorinator' || msg.protocol === 'aqualink' || msg.protocol === 'jandy') return this.extractByte(msg.header, 3);
         return this.extractByte(msg.header, 4);
     },
     extractSourceByte: function (msg) {
@@ -246,6 +277,7 @@ var msgManager = {
             let val = this.extractByte(msg.header, 2);
             return 0;
         }
+        else if (msg.protocol === 'jandy') return 0;
         else if (msg.protocol === 'hayward') {
             return this.extractByte(msg.header, 2);
         }
@@ -257,13 +289,14 @@ var msgManager = {
         }
     },
     extractDestByte: function (msg) {
-        if (msg.protocol === 'hayward') return this.extractByte(msg.header, 4);
+        if (msg.protocol === 'jandy') return this.extractByte(msg.header, 2);
+        else if (msg.protocol === 'hayward') return this.extractByte(msg.header, 4);
         else if (msg.protocol === 'screenlogic') return msg.dir === 'in' ? 34 : 16;
         else if (msg.protocol !== 'chlorinator') return this.extractByte(msg.header, 2);
         var val = this.extractByte(msg.header, 2);
         return val >= 80 ? val : 16;
     },
-    extractControllerByte: function (msg) { return msg.protocol === 'chlorinator' || msg.protocol === 'aqualink' ? 0 : msg.protocol === 'screenlogic' ? msg.controllerId : this.extractByte(msg.header, 1); },
+    extractControllerByte: function (msg) { return msg.protocol === 'chlorinator' || msg.protocol === 'aqualink' || msg.protocol === 'jandy' ? 0 : msg.protocol === 'screenlogic' ? msg.controllerId : this.extractByte(msg.header, 1); },
     extractByte: function (arr, ndx, def) { return arr.length > ndx ? arr[ndx] : def; },
     toAscii: function (byte) { return (byte < 127 && byte > 31) ? String.fromCharCode(byte) : '.'; },
     toHex: function (byte, pad) {
@@ -278,7 +311,11 @@ var msgManager = {
         return sum;
     },
     calcChecksum: function (msg) {
-        if (msg.protocol !== 'chlorinator' && msg.protocol !== 'aqualink') {
+        if (msg.protocol === 'jandy') {
+            var checksum = this.sumArray(msg.header.slice(2)) + this.sumArray(msg.payload);
+            msg.term = [checksum % 256, 16, 3];
+        }
+        else if (msg.protocol !== 'chlorinator' && msg.protocol !== 'aqualink') {
             msg.header[5] = msg.payload.length;
             var checksum = this.sumArray(msg.header) + this.sumArray(msg.payload);
             msg.term = [Math.floor(checksum / 256), checksum - (Math.floor(checksum / 256) * 256)];
