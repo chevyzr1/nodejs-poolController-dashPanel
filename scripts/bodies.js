@@ -43,7 +43,7 @@
 
             if (typeof data.air !== 'undefined') el.find('span.picAirTemp').text(data.air.format(tempFmt, '--'));
             if (typeof data.solar !== 'undefined') el.find('span.picSolarTemp').text(data.solar.format(tempFmt, '--'));
-            if (typeof data.solar !== 'undefined') el.find('span.picEnclosureTemp').text(data.solar.format(tempFmt, '--'));
+            if (typeof data.enclosureTemp !== 'undefined' && data.enclosureTemp !== 0) el.find('span.picEnclosureTemp').text(data.enclosureTemp.toFixed(1));
             if (typeof data.units !== 'undefined') {
                 el.find('span.picTempUnits').text(data.units.name);
                 el.attr('data-unitsname', data.units.name);

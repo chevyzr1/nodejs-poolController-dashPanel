@@ -42,6 +42,14 @@
             var self = this, o = self.options, el = self.element;
             el.find('div.picFilters').each(function () { this.initFilters(data); });
         },
+        _createEnclosurePanel: function (data) {
+            var el = this.element;
+            if (typeof data.temps !== 'undefined') {
+                el.find('div.picEnclosure').each(function () {
+                    if (typeof this.setTemps === 'function') this.setTemps(data.temps);
+                });
+            }
+        },
         _createValvesPanel: function (data) {
             var self = this, o = self.options, el = self.element;
             el.find('div.picValves').each(function () { this.initValves(data); });
@@ -153,6 +161,7 @@
                     self._createChemistryPanel(data);
                     self._createSchedulesPanel(data);
                     self._createFiltersPanel(data);
+                    self._createEnclosurePanel(data);
                     self._createValvesPanel(data);
                     if (typeof data.equipment !== 'undefined' && typeof data.equipment.messages !== 'undefined') {
                         $('div.picSysMessages').each(function () {
@@ -211,6 +220,7 @@
                     self._createChemistryPanel(data);
                     self._createSchedulesPanel(data);
                     self._createFiltersPanel(data);
+                    self._createEnclosurePanel(data);
                     self._createValvesPanel(data);
                     self._initSockets();
                     console.log(data);
@@ -385,6 +395,9 @@
                 }
                 $('div.picBodies').each(function () {
                     this.setTemps(data);
+                });
+                $('div.picEnclosure').each(function () {
+                    if (typeof this.setTemps === 'function') this.setTemps(data);
                 });
             });
             o.socket.on('chlorinator', function (data) {

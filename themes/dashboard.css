@@ -476,3 +476,40 @@ div.picBodyTemp > div:nth-child(2) {
     max-width: 25%;
   }
 }
+
+/* Enclosure widget */
+div.picEnclosurePanel {
+  padding: 4px 8px;
+}
+div.picEnclosureRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 2px 0;
+}
+label.picEnclosureLabel {
+  min-width: 3em;
+  font-weight: bold;
+  color: var(--text-color, #333);
+}
+span.picEnclosureTempValue {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+label.picEnclosureTempUnit {
+  font-size: 0.9em;
+  color: var(--text-color, #555);
+}
+span.picEnclosureFanStatus {
+  font-weight: bold;
+  padding: 1px 8px;
+  border-radius: 4px;
+}
+span.picEnclosureFanOn {
+  background-color: #4caf50;
+  color: #fff;
+}
+span.picEnclosureFanOff {
+  background-color: #e0e0e0;
+  color: #555;
+}

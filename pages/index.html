@@ -47,6 +47,7 @@
     <script type="text/javascript" src="scripts/config/heaters.js"></script>
     <script type="text/javascript" src="scripts/config/chemistry.js"></script>
     <script type="text/javascript" src="scripts/config/controller.js"></script>
+    <script type="text/javascript" src="scripts/enclosure.js"></script>
     <script type="text/javascript" src="scripts/uploader.js"></script>
     <link rel="stylesheet" type="text/css" href="jquery-ui/jquery-ui.css" />
     <link rel="stylesheet" type="text/css" href="jquery-ui/jquery-ui.theme.css" />
@@ -87,6 +88,7 @@
                 <div class="picCircuits picControlPanel control-panel"></div>
                 <div class="picLights picControlPanel control-panel"></div>
                 <div class="picFilters picControlPanel control-panel"></div>
+                <div class="picEnclosure picControlPanel control-panel"></div>
                 <div class="picValves picControlPanel control-panel"></div>
                 <div class="picVirtualCircuits picControlPanel control-panel"></div>
             </div>
@@ -114,6 +116,7 @@
             $('div.picChemistry').chemistry();
             $('div.picSchedules').schedules();
             $('div.picFilters').bodyFilters();
+            $('div.picEnclosure').enclosure();
             $('div.picValves').valves();
         });
     </script>
