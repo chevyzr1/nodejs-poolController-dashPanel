@@ -513,3 +513,7 @@ span.picEnclosureFanOff {
   background-color: #e0e0e0;
   color: #555;
 }
+span.picEnclosureFanUnknown {
+  background-color: #bdbdbd;
+  color: #888;
+}
