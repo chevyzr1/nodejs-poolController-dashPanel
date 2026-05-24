@@ -8,6 +8,7 @@
     --picSchedules-order: 15;
     --picFilters-order: 17;
     --picValves-order: 20;
+    --picEnclosure-order: 25;
     --picBodies-display: block;
     --picCircuits-display: block;
     --picLights-display: block;
@@ -17,6 +18,7 @@
     --picSchedules-display: block;
     --picFilters-display: block;
     --picValves-display: block;
+    --picEnclosure-display: block;
     --number-of-columns: 2;
     --dashContainer2-display: block;
     --dashContainer3-display: block;
@@ -300,6 +302,10 @@ div.picFilters {
 div.picValves {
     order: var(--picValves-order);
     display: var(--picValves-display) !important;
+}
+div.picEnclosure {
+    order: var(--picEnclosure-order);
+    display: var(--picEnclosure-display) !important;
 }
 div.picLights{
     order :var(--picLights-order);

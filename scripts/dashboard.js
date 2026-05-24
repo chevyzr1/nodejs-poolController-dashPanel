@@ -266,6 +266,10 @@
                     $(':root').css('--picValves-order', getStorage('--picValves-order'));
                     if (typeof getStorage('--picValves-display') === 'undefined') setStorage('--picValves-display', $(':root').css('--picValves-display'));
                     $(':root').css('--picValves-display', getStorage('--picValves-display'));
+                    if (typeof getStorage('--picEnclosure-order') === 'undefined') setStorage('--picEnclosure-order', $(':root').css('--picEnclosure-order'));
+                    $(':root').css('--picEnclosure-order', getStorage('--picEnclosure-order'));
+                    if (typeof getStorage('--picEnclosure-display') === 'undefined') setStorage('--picEnclosure-display', $(':root').css('--picEnclosure-display'));
+                    $(':root').css('--picEnclosure-display', getStorage('--picEnclosure-display'));
 
                     if (typeof getStorage('--show-time-remaining') === 'undefined') setStorage('--show-time-remaining', $(':root').css('--show-time-remaining'));
                     $(':root').css('--show-time-remaining', getStorage('--show-time-remaining'));
