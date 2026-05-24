@@ -18,6 +18,7 @@
             $('<span class="picEnclosureTempValue">--</span>').appendTo(tempRow);
             $('<label class="picEnclosureTempUnit">°F</label>').appendTo(tempRow);
             var fanRow = $('<div class="picEnclosureRow"></div>').appendTo(panel);
+            $('<div class="picIndicator" data-status="off"></div>').appendTo(fanRow);
             $('<label class="picEnclosureLabel">Fan</label>').appendTo(fanRow);
             $('<span class="picEnclosureFanStatus picEnclosureFanUnknown">---</span>').appendTo(fanRow);
         },
@@ -61,6 +62,7 @@
         },
         _setFanStatus: function (isOn) {
             var el = this.element;
+            el.find('div.picIndicator').attr('data-status', isOn ? 'on' : 'off');
             el.find('span.picEnclosureFanStatus')
                 .text(isOn ? 'ON' : 'OFF')
                 .removeClass('picEnclosureFanOn picEnclosureFanOff picEnclosureFanUnknown')
