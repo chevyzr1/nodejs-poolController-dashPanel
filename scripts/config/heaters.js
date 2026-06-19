@@ -39,6 +39,7 @@
         _buildControls: function () {
             var self = this, o = self.options, el = self.element;
             var isIntelliCenter = (($('body').attr('data-controllertype') || '').toLowerCase() === 'intellicenter');
+            var controller = ($('body').attr('data-controllertype') || '').toLowerCase();
             var maxNameLength = isIntelliCenter ? 15 : 16;
             el.empty();
             el.addClass('picConfigCategory cfgHeater');
@@ -67,6 +68,18 @@
             $('<hr></hr>').appendTo(pnl);
             $('<div></div>').appendTo(pnl).addClass('pnl-heater-options');
             line = $('<div></div>').appendTo(pnl);
+            if (controller === 'nixie' && o.interlockCircuits && o.interlockCircuits.length > 1) {
+                $('<hr></hr>').appendTo(pnl);
+                var interlockLine = $('<div></div>').appendTo(pnl);
+                $('<div></div>').appendTo(interlockLine).pickList({
+                    bindColumn: 0, displayColumn: 1, labelText: 'Valve Interlock Circuit', binding: 'valveInterlockCircuit',
+                    columns: [{ binding: 'id', hidden: true, text: 'Id' }, { binding: 'name', text: 'Circuit/Feature' }],
+                    items: o.interlockCircuits, inputAttrs: { style: { width: '10rem' } }, labelAttrs: { style: { width: '10.5rem' } }
+                });
+                interlockLine = $('<div></div>').appendTo(pnl);
+                $('<div></div>').appendTo(interlockLine).valueSpinner({ canEdit: true, labelText: 'Startup Delay', binding: 'valveStartupDelay', min: 0, max: 300, step: 1, fmtMask: '#,##0', units: 'sec', inputAttrs: { style: { width: '3.5rem' } }, labelAttrs: { style: { width: '7rem', marginRight: '.25rem' } } });
+                $('<div></div>').appendTo(interlockLine).valueSpinner({ canEdit: true, labelText: 'Valve Close Delay', binding: 'valveShutdownDelay', min: 0, max: 300, step: 1, fmtMask: '#,##0', units: 'sec', inputAttrs: { style: { width: '3.5rem' } }, labelAttrs: { style: { marginLeft: '1rem', marginRight: '.25rem' } } });
+            }
             var bindpnl = $('<div></div>').addClass('pnlDeviceBinding').REMBinding({ servers: o.servers }).appendTo(pnl).hide();
             $('<hr></hr>').prependTo(bindpnl);
 
