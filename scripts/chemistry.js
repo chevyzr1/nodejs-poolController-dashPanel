@@ -94,8 +94,11 @@
                 if (data.isActive === false) el.hide();
                 else el.show();
                 el.attr('data-active', data.isActive === false ? false : true);
-                //data.state = data.currentOutput > 0 ? 'on' : 'off';
-                el.find('div.picChlorinatorState').attr('data-status', data.currentOutput > 0 ? 'on' : 'off');
+                // Green when running OK, yellow (pending) when commanding output but IntelliChlor
+                // reports a fault (lowflow, lowsalt, etc.), gray when output is 0.
+                var sval = (data.status && typeof data.status === 'object') ? data.status.val : 0;
+                var indStatus = data.currentOutput > 0 ? (sval > 0 && sval !== 128 ? 'pending' : 'on') : 'off';
+                el.find('div.picChlorinatorState').attr('data-status', indStatus);
                 dataBinder.bind(el, data);
                 let sc = el.find('div.picSuperChlor');
                 if (data.superChlor) {
@@ -282,8 +285,9 @@
             var div = $('<div class="picChlorinatorState picIndicator"></div>');
             el.attr('data-id', o.id);
             div.appendTo(el);
+            var initSval = (o.status && typeof o.status === 'object') ? o.status.val : 0;
             div.attr('data-ison', o.currentOutput > 0);
-            div.attr('data-status', o.currentOutput > 0 ? 'on' : 'off');
+            div.attr('data-status', o.currentOutput > 0 ? (initSval > 0 && initSval !== 128 ? 'pending' : 'on') : 'off');
 
             $('<label class="picChlorinatorName" data-bind="name"></label>').appendTo(el);
             $('<span class="picSaltLevel picData"><label class="picInline-label">Salt</label><span class="picSaltLevel" data-bind="saltLevel" data-fmttype="number" data-fmtmask="#,##0" data-fmtempty="----"></span><label class="picUnits">ppm</label></span>').appendTo(el);
