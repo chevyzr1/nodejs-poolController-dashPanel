@@ -85,8 +85,13 @@
             if (row.length === 0) return;
             var faults = row.find('div.picHeaterFaults');
             var existing = faults.find('span[data-msgcode="' + msg.code + '"]');
-            if (msg.severity === 'warning' || msg.severity === 'error') {
-                var label = parts[2] === 'hilimit' ? 'Hi-Limit Trip' : parts[2] === 'sensor' ? 'Sensor Fault' : parts[2] === 'pump' ? 'Pump/Flow Fault' : msg.code;
+            if (msg.severity === 'warning' || msg.severity === 'error' || msg.severity === 'info') {
+                var label;
+                if (parts[2] === 'hilimit') label = 'Hi-Limit Trip';
+                else if (parts[2] === 'sensor') label = 'Sensor Fault';
+                else if (parts[2] === 'pump') label = 'Pump/Flow Fault';
+                else if (msg.message) label = msg.message;
+                else label = msg.code;
                 if (existing.length === 0) {
                     $('<span class="picHeaterFaultMsg"></span>').attr('data-msgcode', msg.code).text(label).appendTo(faults);
                 } else {
