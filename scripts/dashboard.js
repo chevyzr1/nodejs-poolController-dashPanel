@@ -280,6 +280,10 @@
                     $(':root').css('--picEnclosure-order', getStorage('--picEnclosure-order'));
                     if (typeof getStorage('--picEnclosure-display') === 'undefined') setStorage('--picEnclosure-display', $(':root').css('--picEnclosure-display'));
                     $(':root').css('--picEnclosure-display', getStorage('--picEnclosure-display'));
+                    if (typeof getStorage('--picHeaterStatus-order') === 'undefined') setStorage('--picHeaterStatus-order', $(':root').css('--picHeaterStatus-order'));
+                    $(':root').css('--picHeaterStatus-order', getStorage('--picHeaterStatus-order'));
+                    if (typeof getStorage('--picHeaterStatus-display') === 'undefined') setStorage('--picHeaterStatus-display', $(':root').css('--picHeaterStatus-display'));
+                    $(':root').css('--picHeaterStatus-display', getStorage('--picHeaterStatus-display'));
 
                     if (typeof getStorage('--show-time-remaining') === 'undefined') setStorage('--show-time-remaining', $(':root').css('--show-time-remaining'));
                     $(':root').css('--show-time-remaining', getStorage('--show-time-remaining'));

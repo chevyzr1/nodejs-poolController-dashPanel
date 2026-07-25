@@ -36,7 +36,7 @@
 
             var gvDiv = $('<div class="picHeaterStat"></div>').appendTo(statsRow);
             $('<label>GV Hours</label>').appendTo(gvDiv);
-            $('<span class="picHeaterGVHours"></span>').text(heater.gasValveHours > 0 ? heater.gasValveHours : '--').appendTo(gvDiv);
+            $('<span class="picHeaterGVHours"></span>').text(typeof heater.gasValveHours !== 'undefined' ? heater.gasValveHours : '--').appendTo(gvDiv);
 
             var timeDiv = $('<div class="picHeaterStat"></div>').appendTo(statsRow);
             $('<label class="picHeaterTimeLabel">Last off</label>').appendTo(timeDiv);
@@ -64,7 +64,7 @@
             var flame = row.find('span.picHeaterFlame');
             if (heater.isOn) flame.removeClass('picHeaterFlameOff'); else flame.addClass('picHeaterFlameOff');
             if (typeof heater.cycleCount !== 'undefined') row.find('span.picHeaterCycleCount').text(heater.cycleCount);
-            if (typeof heater.gasValveHours !== 'undefined' && heater.gasValveHours > 0) row.find('span.picHeaterGVHours').text(heater.gasValveHours);
+            if (typeof heater.gasValveHours !== 'undefined') row.find('span.picHeaterGVHours').text(heater.gasValveHours);
             var timeLabel = row.find('label.picHeaterTimeLabel');
             var timeSpan = row.find('span.picHeaterTimeValue');
             if (heater.isOn && heater.startTime) {
