@@ -50,6 +50,14 @@
                 });
             }
         },
+        _createHeaterStatusPanel: function (data) {
+            var el = this.element;
+            if (typeof data.heaters !== 'undefined') {
+                el.find('div.picHeaterStatus').each(function () {
+                    if (typeof this.initHeaters === 'function') this.initHeaters(data.heaters);
+                });
+            }
+        },
         _createValvesPanel: function (data) {
             var self = this, o = self.options, el = self.element;
             el.find('div.picValves').each(function () { this.initValves(data); });
@@ -162,6 +170,7 @@
                     self._createSchedulesPanel(data);
                     self._createFiltersPanel(data);
                     self._createEnclosurePanel(data);
+                    self._createHeaterStatusPanel(data);
                     self._createValvesPanel(data);
                     if (typeof data.equipment !== 'undefined' && typeof data.equipment.messages !== 'undefined') {
                         $('div.picSysMessages').each(function () {
@@ -221,6 +230,7 @@
                     self._createSchedulesPanel(data);
                     self._createFiltersPanel(data);
                     self._createEnclosurePanel(data);
+                    self._createHeaterStatusPanel(data);
                     self._createValvesPanel(data);
                     self._initSockets();
                     console.log(data);
@@ -345,6 +355,9 @@
             });
             o.socket.on('equipmentMessage', function (data) {
                 console.log({ evt: 'equipmentMessage', data: data });
+                el.find('div.picHeaterStatus').each(function () {
+                    if (typeof this.setEquipmentMessage === 'function') this.setEquipmentMessage(data);
+                });
             });
             o.socket.on('circuitGroup', function (data) {
                 console.log({ evt: 'circuitGroup', data: data });
@@ -524,6 +537,9 @@
             });
             o.socket.on('heater', function (data) {
                 console.log({ evt: 'heater', data: data });
+                el.find('div.picHeaterStatus').each(function () {
+                    if (typeof this.updateHeater === 'function') this.updateHeater(data);
+                });
             });
             o.socket.on('connect_error', function (data) {
                 console.log('connection error:' + data);

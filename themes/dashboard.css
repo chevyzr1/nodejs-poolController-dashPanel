@@ -517,3 +517,70 @@ span.picEnclosureFanUnknown {
   background-color: #bdbdbd;
   color: #888;
 }
+
+/* Heater Status Panel */
+div.picHeaterStatusPanel {
+  padding: 4px 8px;
+}
+div.picHeaterStatusRow {
+  padding: 4px 0 6px 0;
+  border-bottom: 1px solid var(--border-color, #e0e0e0);
+}
+div.picHeaterStatusRow:last-child {
+  border-bottom: none;
+}
+div.picHeaterStatusName {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+span.picHeaterName {
+  font-weight: bold;
+  font-size: 1em;
+}
+span.picHeaterType {
+  font-size: 0.78em;
+  color: var(--text-color, #777);
+}
+span.picHeaterFlame {
+  color: #e55;
+  font-size: 1em;
+}
+span.picHeaterFlameOff {
+  color: #bbb;
+}
+div.picHeaterStats {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+div.picHeaterStat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 3.5em;
+}
+div.picHeaterStat label {
+  font-size: 0.7em;
+  color: var(--text-color, #777);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+div.picHeaterStat span {
+  font-size: 1em;
+  font-weight: bold;
+}
+div.picHeaterFaults {
+  margin-top: 2px;
+}
+span.picHeaterFaultMsg {
+  display: inline-block;
+  background: #e55;
+  color: #fff;
+  font-size: 0.75em;
+  padding: 1px 6px;
+  border-radius: 3px;
+  margin-right: 4px;
+  margin-top: 2px;
+}
