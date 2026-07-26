@@ -48,6 +48,10 @@
                 timeSpan.text(new Date(heater.endTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
             }
 
+            var tempDiv = $('<div class="picHeaterStat"></div>').appendTo(statsRow);
+            $('<label>HX Temp</label>').appendTo(tempDiv);
+            $('<span class="picHeaterWaterTemp"></span>').text(typeof heater.waterTemp !== 'undefined' ? heater.waterTemp + '°' : '--').appendTo(tempDiv);
+
             $('<div class="picHeaterFaults"></div>').appendTo(row);
         },
         updateHeater: function (heater) {
@@ -65,6 +69,7 @@
             if (heater.isOn) flame.removeClass('picHeaterFlameOff'); else flame.addClass('picHeaterFlameOff');
             if (typeof heater.cycleCount !== 'undefined') row.find('span.picHeaterCycleCount').text(heater.cycleCount);
             if (typeof heater.gasValveHours !== 'undefined') row.find('span.picHeaterGVHours').text(heater.gasValveHours);
+            if (typeof heater.waterTemp !== 'undefined') row.find('span.picHeaterWaterTemp').text(heater.waterTemp + '°');
             var timeLabel = row.find('label.picHeaterTimeLabel');
             var timeSpan = row.find('span.picHeaterTimeValue');
             if (heater.isOn && heater.startTime) {
